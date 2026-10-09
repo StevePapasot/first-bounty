@@ -1,0 +1,26 @@
+name: Keep Supabase awake
+
+# Free-plan Supabase projects are paused after about a week without database activity,
+# which would silently break the waitlist form. One tiny call per day is enough to prevent that.
+# The key below is the *publishable* key (public by design); it can only call this trivial function.
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # every day at 06:17 UTC
+  workflow_dispatch: {}
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Call public.keepalive()
+        run: |
+          curl --fail --silent --show-error --retry 3 --max-time 20 \
+            -X POST "https://kxyzgfobuhbymujmsgyn.supabase.co/rest/v1/rpc/keepalive" \
+            -H "apikey: sb_publishable_rEi6JGhO6FiR3OjBSUcEbQ_91fVC1Xd" \
+            -H "Content-Type: application/json" \
+            -d '{}'
+          echo

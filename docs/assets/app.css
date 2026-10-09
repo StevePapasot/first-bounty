@@ -485,9 +485,21 @@
   .wl-text{flex:1;min-width:220px}
   .wl-text h3{margin:0 0 4px;font-size:16px;font-weight:650;text-wrap:balance}
   .wl-text p{margin:0;font-size:13px;color:var(--fg-dim)}
-  .wl-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .wl-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-start;flex:0 1 400px;max-width:100%}
   .wl-btn{white-space:nowrap}
   .wl-hint{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .wl-form{position:relative;display:flex;flex-direction:column;gap:8px;width:100%}
+  .wl-row{display:flex;gap:8px;flex-wrap:wrap}
+  .wl-input{flex:1 1 190px;min-width:0;background:var(--surface);color:var(--fg);border:1px solid var(--border);border-radius:9px;padding:10px 12px;font:inherit;font-size:14px}
+  .wl-input::placeholder{color:var(--muted)}
+  .wl-input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .wl-consent{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.45;color:var(--fg-dim);cursor:pointer}
+  .wl-consent input{margin-top:2px;accent-color:var(--accent);flex:none}
+  .wl-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+  .wl-msg{font-size:12.5px;line-height:1.45;color:var(--fg-dim)}
+  .wl-msg:empty{display:none}
+  .wl-msg.ok{color:var(--ok);font-weight:500}
+  .wl-msg.err{color:var(--crit)}
 
   /* ---- about / instructor ---- */
   .about{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:18px 20px}

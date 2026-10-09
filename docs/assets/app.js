@@ -53,23 +53,10 @@ const streak=(function(){
 })();
 
 /* ============================================================
-   CONFIG — edit these to make the course your own before publishing
+   CONFIG — lives in assets/config.js (edit that file, not this one)
    ============================================================ */
-const CONFIG={
-  // ↓ Replace with your real link (Tally / ConvertKit / Gumroad / Discord invite).
-  waitlistUrl:"https://tally.so/r/REPLACE_ME",
-  communityUrl:"",   // optional second link (e.g. Discord). Leave "" to hide.
-  instructor:{
-    name:"Stavros Papasotiropoulos",
-    tagline:{en:"Security practitioner · learning in public",gr:"Επαγγελματίας ασφάλειας · μαθαίνω δημόσια"},
-    creds:["eCPPT","SAL1","ex-SOC L1 Analyst","Engineer"],
-    bio:{
-      en:"I'm learning bug bounty the honest way and building this course as I go — no gurus, no hype. Background in offensive security (eCPPT, SAL1) and a former SOC analyst, now hunting and documenting the journey in the open. If I can get to a first bounty, so can you — let's do it together.",
-      gr:"Μαθαίνω bug bounty με τον ειλικρινή τρόπο και φτιάχνω αυτό το course καθώς προχωράω — χωρίς γκουρού, χωρίς υπερβολές. Υπόβαθρο σε offensive security (eCPPT, SAL1) και πρώην SOC analyst· τώρα κυνηγάω και καταγράφω τη διαδρομή ανοιχτά. Αν φτάσω εγώ στο πρώτο bounty, μπορείς κι εσύ — ας το κάνουμε μαζί."
-    },
-    links:[["Portfolio","https://spapasotiropoulos.com"],["LinkedIn","https://www.linkedin.com/in/stavros-papasotiropoulos-b35302200"],["GitHub","https://github.com/StevePapasot"]]
-  }
-};
+const CONFIG=window.FB_CONFIG||{supabase:null,waitlistUrl:"",communityUrl:"",contactEmail:"",
+  instructor:{name:"",tagline:"",creds:[],bio:"",links:[]}};
 
 /* ============================================================
    i18n — EN / GR shell (lesson bodies stay English: the field's language)
@@ -91,6 +78,7 @@ const I18N={
     "spec.rec":"Recommended for you","spec.pick":"Focus this lane →","spec.mastered":"mastered","spec.steps":"steps","spec.change":"Change lane","spec.manual":"Open the Field Manual for this lane →",
     "foot.main":"<strong>First Bounty</strong> — a free, hands-on, ethical bug bounty course. Every target is a local simulation in your browser.","foot.sub":"Only ever test systems you're authorized to test. Your progress is saved privately on this device — no account, no tracking.",
     "wl.title":"Learn bug bounty with me — get the next lessons & community","wl.body":"New modules, write-ups from real (authorized) hunting, and a spot in the community. Free to join.","wl.btn":"Join the waitlist →","wl.community":"Join the community →",
+    "wl.email":"Your email","wl.consent":"Email me about new modules and the launch of First Bounty. No spam — I can unsubscribe any time.","wl.privacy":"Privacy notice","wl.sending":"Sending…","wl.ok":"✓ You're on the list. I'll email you when the next modules are ready.","wl.err.email":"That email doesn't look right — please check it.","wl.err.consent":"Please tick the box so I know you're happy to get emails.","wl.err.net":"Couldn't reach the server. Please try again in a minute.","foot.privacy":"Privacy",
     "ab.by":"Built by","ab.disclaimer":"Honest positioning: this is a learning-in-public project, not an \"expert\" selling secrets. Credentials shown are real and self-reported.",
     "cert.title":"Your Certificate","cert.sub":"A shareable snapshot of the reps you've actually put in","cert.handleLabel":"Your hacker handle — shown on the certificate & share text","cert.certifies":"This certifies that","cert.anon":"Anonymous Hunter","cert.desc":"has trained in ethical bug bounty hunting on First Bounty — completing hands-on labs and CTF challenges across web and network security, from the TCP/IP stack to real-world vulnerability classes.","cert.complete":"Course complete","cert.rank":"Rank attained","cert.labs":"Labs & CTFs","cert.xp":"XP earned","cert.issued":"Issued","cert.selfpaced":"Self-paced · practice only on authorized systems","cert.copy":"⇪ Copy share text","cert.back":"← Back to roadmap","cert.note":"Screenshot the certificate to share it — artifacts can't download or print. It records the reps you've actually done: honest and self-paced, no proctor.","cert.sealVerified":"CERTIFIED HUNTER","cert.sealComplete":"COURSE COMPLETE","cert.gateTitle":"One step left to get verified","cert.gateBody":"Your certificate becomes a <strong>verified</strong>, shareable credential once you pass the Capstone Exam — a randomized final across the whole course. Clicking through doesn't earn it; passing does.","cert.gateBtn":"Take the Capstone Exam →",
     "cap.title":"Capstone Exam","cap.sub":"Pass this to earn your verified certificate — it's what makes the credential mean something","cap.intro":"A randomized final across the whole course: networking, web vulnerability classes, methodology, ethics and reporting. 12 questions, drawn fresh each attempt. You need <strong>10/12 (83%)</strong> to pass. No time limit, unlimited retakes — but it's meant to be earned.","cap.start":"▶ Start the exam","cap.submit":"Submit exam","cap.retake":"Retake exam","cap.qof":"Question","cap.of":"of","cap.answered":"answered","cap.passTitle":"Passed — you're a Certified Hunter.","cap.failTitle":"Not yet — review and retake.","cap.score":"Your score","cap.pass":"pass mark 10/12","cap.review":"Worth reviewing:","cap.goCert":"View your verified certificate →","cap.passedBadge":"✓ Capstone passed","cap.notPassed":"Not passed yet","cap.needAll":"Answer all 12 questions first.",
@@ -111,6 +99,7 @@ const I18N={
     "spec.rec":"Προτείνεται για σένα","spec.pick":"Εστίασε εδώ →","spec.mastered":"κατακτημένο","spec.steps":"βήματα","spec.change":"Άλλαξε λωρίδα","spec.manual":"Άνοιξε το Εγχειρίδιο γι' αυτή τη λωρίδα →",
     "foot.main":"<strong>First Bounty</strong> — ένα δωρεάν, πρακτικό, ηθικό course για bug bounty. Κάθε στόχος είναι τοπικό simulation στον browser σου.","foot.sub":"Δοκίμαζε μόνο συστήματα που έχεις εξουσιοδότηση να ελέγξεις. Η πρόοδός σου αποθηκεύεται ιδιωτικά σε αυτή τη συσκευή — χωρίς λογαριασμό, χωρίς tracking.",
     "wl.title":"Μάθε bug bounty μαζί μου — πάρε τα επόμενα μαθήματα & την κοινότητα","wl.body":"Νέα modules, write-ups από πραγματικό (εξουσιοδοτημένο) κυνήγι, και θέση στην κοινότητα. Δωρεάν εγγραφή.","wl.btn":"Μπες στη λίστα αναμονής →","wl.community":"Μπες στην κοινότητα →",
+    "wl.email":"Το email σου","wl.consent":"Θέλω να λαμβάνω email για νέα modules και το launch του First Bounty. Χωρίς spam — μπορώ να διαγραφώ όποτε θέλω.","wl.privacy":"Δήλωση απορρήτου","wl.sending":"Αποστολή…","wl.ok":"✓ Είσαι στη λίστα. Θα σου στείλω email όταν είναι έτοιμα τα επόμενα modules.","wl.err.email":"Αυτό το email δεν φαίνεται σωστό — έλεγξέ το.","wl.err.consent":"Τσέκαρε το κουτάκι για να ξέρω ότι θέλεις να λαμβάνεις email.","wl.err.net":"Δεν μπόρεσα να επικοινωνήσω με τον server. Δοκίμασε ξανά σε λίγο.","foot.privacy":"Απόρρητο",
     "ab.by":"Από τον","ab.disclaimer":"Ειλικρινής τοποθέτηση: αυτό είναι ένα project «μαθαίνω δημόσια», όχι ένας «ειδικός» που πουλάει μυστικά. Τα credentials είναι αληθινά και δηλωμένα από εμένα.",
     "cert.title":"Το Πιστοποιητικό σου","cert.sub":"Ένα κοινοποιήσιμο στιγμιότυπο της δουλειάς που έχεις όντως βάλει","cert.handleLabel":"Το hacker handle σου — εμφανίζεται στο πιστοποιητικό & στο κείμενο κοινοποίησης","cert.certifies":"Πιστοποιείται ότι ο/η","cert.anon":"Ανώνυμος Κυνηγός","cert.desc":"εκπαιδεύτηκε στο ηθικό bug bounty hunting στο First Bounty — ολοκληρώνοντας πρακτικά labs και CTF challenges σε web και network security, από το TCP/IP stack μέχρι πραγματικές κατηγορίες ευπαθειών.","cert.complete":"Ολοκλήρωση","cert.rank":"Βαθμός","cert.labs":"Labs & CTFs","cert.xp":"XP","cert.issued":"Εκδόθηκε","cert.selfpaced":"Αυτορυθμιζόμενο · εξάσκηση μόνο σε εξουσιοδοτημένα συστήματα","cert.copy":"⇪ Αντιγραφή κειμένου","cert.back":"← Πίσω στον χάρτη","cert.note":"Βγάλε screenshot το πιστοποιητικό για να το μοιραστείς — τα artifacts δεν κατεβάζουν/εκτυπώνουν. Καταγράφει τη δουλειά που έχεις όντως κάνει: ειλικρινά και αυτορυθμιζόμενα.","cert.sealVerified":"ΠΙΣΤΟΠΟΙΗΜΕΝΟΣ","cert.sealComplete":"ΟΛΟΚΛΗΡΩΜΕΝΟ","cert.gateTitle":"Ένα βήμα ακόμη για πιστοποίηση","cert.gateBody":"Το πιστοποιητικό σου γίνεται <strong>πιστοποιημένο</strong>, κοινοποιήσιμο credential μόλις περάσεις τις Τελικές Εξετάσεις — ένα τυχαιοποιημένο τεστ σε όλο το course. Το κλικ δεν το κερδίζει· το πέρασμα ναι.","cert.gateBtn":"Δώσε τις Τελικές Εξετάσεις →",
     "cap.title":"Τελικές Εξετάσεις","cap.sub":"Πέρασέ τες για να κερδίσεις το πιστοποιημένο σου certificate — αυτό δίνει αξία στο credential","cap.intro":"Ένα τυχαιοποιημένο τεστ σε όλο το course: δίκτυα, κατηγορίες web ευπαθειών, μεθοδολογία, ηθική και reporting. 12 ερωτήσεις, διαφορετικές κάθε φορά. Χρειάζεσαι <strong>10/12 (83%)</strong> για να περάσεις. Χωρίς χρονικό όριο, απεριόριστες προσπάθειες — αλλά πρέπει να κερδηθεί.","cap.start":"▶ Ξεκίνα το τεστ","cap.submit":"Υποβολή","cap.retake":"Ξαναδώσ' το","cap.qof":"Ερώτηση","cap.of":"από","cap.answered":"απαντήθηκαν","cap.passTitle":"Πέρασες — είσαι Πιστοποιημένος Κυνηγός.","cap.failTitle":"Όχι ακόμη — ανασκόπησε και ξαναδώσ' το.","cap.score":"Το σκορ σου","cap.pass":"βάση 10/12","cap.review":"Αξίζει ανασκόπηση:","cap.goCert":"Δες το πιστοποιημένο σου certificate →","cap.passedBadge":"✓ Οι εξετάσεις πέρασαν","cap.notPassed":"Δεν πέρασε ακόμη","cap.needAll":"Απάντησε και στις 12 ερωτήσεις πρώτα.",
@@ -825,11 +814,50 @@ function showTool(name){
 /* ============================================================
    RENDER: home / roadmap
    ============================================================ */
+/* ---- waitlist (Supabase REST, insert-only via row-level security) ---- */
+async function joinWaitlist(email){
+  const S=CONFIG.supabase;
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),12000);
+  try{
+    const res=await fetch(String(S.url).replace(/\/+$/,"")+"/rest/v1/"+(S.table||"waitlist"),{
+      method:"POST",
+      headers:{"apikey":S.key,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({email:email,lang:LANG,consent:true,consent_version:S.consentVersion||"v1",source:"site"}),
+      credentials:"omit",referrerPolicy:"no-referrer",signal:ctrl.signal
+    });
+    if(res.status===201||res.status===204)return "ok";
+    if(res.status===409)return "dup";            // already on the list: same friendly answer, so the form can't be used to probe who signed up
+    if(res.status===400||res.status===422)return "invalid";
+    return "error";
+  }catch(e){return "error";}
+  finally{clearTimeout(to);}
+}
+function bindWaitlist(){
+  const f=$("#wlForm");if(!f)return;
+  const msg=$("#wlMsg"),btn=f.querySelector("button[type=submit]"),em=$("#wlEmail"),cb=$("#wlConsent");
+  const say=(txt,cls)=>{msg.textContent=txt||"";msg.className="wl-msg"+(cls?" "+cls:"");};
+  const joined=()=>{lsSetStr("firstbounty.wl","1");const box=f.parentElement;f.remove();const d=el("div","wl-msg ok");d.textContent=t("wl.ok");box.prepend(d);};
+  f.addEventListener("submit",async ev=>{
+    ev.preventDefault();
+    if($("#wlHp").value){joined();return;}       // honeypot: people never see this field, bots fill it — pretend it worked
+    const email=em.value.trim().toLowerCase();
+    if(email.length<6||email.length>254||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){say(t("wl.err.email"),"err");em.focus();return;}
+    if(!cb.checked){say(t("wl.err.consent"),"err");cb.focus();return;}
+    btn.disabled=true;say(t("wl.sending"));
+    const r=await joinWaitlist(email);
+    if(r==="ok"||r==="dup")joined();
+    else{btn.disabled=false;say(r==="invalid"?t("wl.err.email"):t("wl.err.net"),"err");}
+  });
+}
+
 function renderHome(){
   currentView="home";
   const v=$("#view");
   const p=pct();
-  const wlPlaceholder=/REPLACE_ME/.test(CONFIG.waitlistUrl);
+  const wlForm=!!(CONFIG.supabase&&CONFIG.supabase.url&&CONFIG.supabase.key);
+  const wlJoined=lsGetStr("firstbounty.wl")==="1";
+  const wlLink=!wlForm&&CONFIG.waitlistUrl&&!/REPLACE_ME/.test(CONFIG.waitlistUrl);
+  const wlPlaceholder=!wlForm&&!wlLink;
   const credsHTML=CONFIG.instructor.creds.map(c=>'<span class="spec-chip">'+esc(c)+'</span>').join('');
   const linksHTML=CONFIG.instructor.links.map(([label,url])=>'<a class="about-link" href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(label)+' ↗</a>').join('');
   v.innerHTML=`
@@ -854,9 +882,18 @@ function renderHome(){
     <div class="waitlist">
       <div class="wl-text"><h3>${t("wl.title")}</h3><p>${t("wl.body")}</p></div>
       <div class="wl-actions">
-        <a class="btn wl-btn" href="${esc(CONFIG.waitlistUrl)}" target="_blank" rel="noopener">${t("wl.btn")}</a>
+        ${wlForm?(wlJoined?`<div class="wl-msg ok">${t("wl.ok")}</div>`:`<form class="wl-form" id="wlForm" novalidate>
+          <div class="wl-row">
+            <input id="wlEmail" class="wl-input" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="${esc(t("wl.email"))}" aria-label="${esc(t("wl.email"))}" required>
+            <button class="btn wl-btn" type="submit">${t("wl.btn")}</button>
+          </div>
+          <label class="wl-consent"><input type="checkbox" id="wlConsent"><span>${t("wl.consent")} <a href="privacy.html" target="_blank" rel="noopener">${t("wl.privacy")}</a></span></label>
+          <input class="wl-hp" type="text" id="wlHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="wl-msg" id="wlMsg" role="status" aria-live="polite"></div>
+        </form>`):''}
+        ${wlLink?`<a class="btn wl-btn" href="${esc(CONFIG.waitlistUrl)}" target="_blank" rel="noopener">${t("wl.btn")}</a>`:''}
         ${CONFIG.communityUrl?`<a class="btn ghost" href="${esc(CONFIG.communityUrl)}" target="_blank" rel="noopener">${t("wl.community")}</a>`:''}
-        ${wlPlaceholder?`<div class="wl-hint">⚙︎ Set your real link in CONFIG.waitlistUrl (top of the script).</div>`:''}
+        ${wlPlaceholder?`<div class="wl-hint">⚙︎ Set up the waitlist in assets/config.js (Supabase, or an external link).</div>`:''}
       </div>
     </div>
     <div class="section-label">${t("how.label")}</div>
@@ -880,9 +917,10 @@ function renderHome(){
     </div>
     <footer class="site-foot">
       <div>${t("foot.main")}</div>
-      <div class="foot-sub">${t("foot.sub")}</div>
+      <div class="foot-sub">${t("foot.sub")} · <a href="privacy.html">${t("foot.privacy")}</a></div>
     </footer>
   `;
+  bindWaitlist();
   const road=$("#road");
   COURSE.forEach((m,mi)=>{
     const card=el("button","road-card");
