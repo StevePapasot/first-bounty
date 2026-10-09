@@ -292,12 +292,16 @@ for (const w of [320, 360, 390]) {
 section('8. privacy page');
 {
   const { ctx, page, t } = await open({ path: 'privacy.html' });
-  const snap = () => ev(page, () => ({ h1: [...document.querySelectorAll('h1')].filter(h => h.offsetParent).map(h => h.textContent), lang: document.documentElement.lang, name: document.querySelector('[data-fill=name]').textContent, links: document.querySelector('[data-fill=contact]').querySelectorAll('a').length }));
+  const snap = () => ev(page, () => ({ h1: [...document.querySelectorAll('h1')].filter(h => h.offsetParent).map(h => h.textContent), lang: document.documentElement.lang, name: document.querySelector('[data-fill=name]').textContent, links: document.querySelector('[data-fill=contact]').querySelectorAll('a').length, mail: [...document.querySelector('[data-fill=contact]').querySelectorAll('a[href^="mailto:"]')].map(a => a.getAttribute('href')) }));
   const en = await snap();
   ok(en.h1.length === 1 && en.h1[0] === 'Privacy notice' && en.lang === 'en' && en.name.length > 0 && en.links > 0, 'English version, controller name and contact links are filled in', en);
+  // the contact address comes from config.js; a notice that collects emails must say how to reach the controller
+  const cfgEmail = (fs.readFileSync(path.join(root, 'assets', 'config.js'), 'utf8').match(/contactEmail\s*:\s*"([^"]*)"/) || [])[1] || '';
+  ok(cfgEmail.length > 3 && cfgEmail.includes('@'), 'a contact email is set in config.js (the privacy notice needs one while the waitlist collects emails)', cfgEmail);
+  ok(en.mail.length === 1 && en.mail[0] === 'mailto:' + cfgEmail, 'the privacy page links exactly that address', en.mail);
   await page.click('.langswitch button[data-set=gr]');
   const gr = await snap();
-  ok(gr.h1.length === 1 && gr.h1[0] === 'Δήλωση απορρήτου' && gr.lang === 'el', 'Greek version', gr);
+  ok(gr.h1.length === 1 && gr.h1[0] === 'Δήλωση απορρήτου' && gr.lang === 'el' && gr.mail.length === 1, 'Greek version (same contact link)', gr);
   ok(t.errors.length === 0 && t.bad.length === 0, 'no errors', [...t.errors, ...t.bad]);
   await ctx.close();
 }
@@ -327,6 +331,22 @@ section('9. published files');
     }
   }
   ok(leaks.length === 0, 'no secret / service-role key in the published files', leaks);
+  // Personal data check: the only email address anywhere is the configured contact (plus obviously fake example addresses),
+  // and no phone number in the pages people read.
+  const cfgMail = (fs.readFileSync(path.join(root, 'assets', 'config.js'), 'utf8').match(/contactEmail\s*:\s*"([^"]*)"/) || [])[1] || '';
+  const strayMail = [], phones = [];
+  for (const f of text) {
+    const src = fs.readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g)) {
+      const e = m[0];
+      // evil.com and x.com: fictional addresses used in lessons and labs (e.g. the CSRF email-change lab)
+      if (e === cfgMail || /@(example\.(com|org|net|invalid)|[a-z0-9.-]*\.invalid|test\.org|acme\.com|evil\.com|x\.com)$/i.test(e)) continue;
+      strayMail.push(path.relative(root, f) + ': ' + e);
+    }
+    if (/\.html$|config\.js$/.test(f)) for (const m of src.matchAll(/(?:\+30|0030)[\s-]?\d[\d\s-]{8,12}\d|\b69\d{8}\b/g)) phones.push(path.relative(root, f) + ': ' + m[0]);
+  }
+  ok(strayMail.length === 0, 'no email address in the published files other than the configured contact (and fake examples)', strayMail);
+  ok(phones.length === 0, 'no phone number in the published pages', phones);
 }
 
 await browser.close();

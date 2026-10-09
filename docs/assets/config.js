@@ -13,7 +13,7 @@ window.FB_CONFIG={
   // Fallback, used only if "supabase" above is removed: link to an external form (Tally, ConvertKit, ...). "" = none.
   waitlistUrl:"",
   communityUrl:"",           // optional second button (e.g. a Discord invite). "" hides it.
-  contactEmail:"",           // shown on the privacy page. Use a project address/alias, not your personal one.
+  contactEmail:"stevepap460@gmail.com",   // shown on the privacy page. Use a project address/alias, not your personal one.
   instructor:{
     name:"Stavros Papasotiropoulos",
     tagline:{en:"Security practitioner · learning in public",gr:"Επαγγελματίας ασφάλειας · μαθαίνω δημόσια"},
