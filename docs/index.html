@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>First Bounty — hands-on bug bounty course</title>
+<meta name="description" content="A free, hands-on bug bounty course: real theory, safe in-browser labs and CTFs. Every target is a local simulation — no real systems are ever touched.">
+<meta name="theme-color" content="#0b0e14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f5f9" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="First Bounty">
+<meta property="og:title" content="First Bounty — hands-on bug bounty course">
+<meta property="og:description" content="A free, hands-on bug bounty course: real theory, safe in-browser labs and CTFs. Every target is a local simulation — no real systems are ever touched.">
+<meta property="og:url" content="https://stevepapasot.github.io/first-bounty/">
+<meta property="og:image" content="https://stevepapasot.github.io/first-bounty/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="First Bounty — hands-on bug bounty course">
+<meta name="twitter:description" content="A free, hands-on bug bounty course: real theory, safe in-browser labs and CTFs. Every target is a local simulation — no real systems are ever touched.">
+<meta name="twitter:image" content="https://stevepapasot.github.io/first-bounty/assets/og.png">
+
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <button class="iconbtn menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    <div class="brand">
+      <div class="logo">&gt;_</div>
+      <div>
+        <h1>First Bounty</h1>
+        <div class="tag" id="brandTag">bug bounty · zero → income</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="rank">
+        <span class="xp" id="xpLabel">0 XP</span>
+        <span class="name" id="rankLabel">Recon Rookie</span>
+      </div>
+      <div class="pbar" title="Course progress"><i id="pbarFill"></i></div>
+      <button class="langbtn" id="langToggle" aria-label="Language">EN</button>
+      <button class="iconbtn" id="themeToggle" aria-label="Toggle theme">◐</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="overlay" id="overlay"></div>
+    <aside id="sidebar"></aside>
+    <main id="main"><div class="wrap" id="view"></div></main>
+  </div>
+</div>
+
+<noscript>
+  <p style="position:fixed;inset:auto 16px 16px 16px;margin:0;padding:12px 14px;border:1px solid #28313f;border-radius:8px;background:#121722;color:#e6eaf2;font:14px/1.5 system-ui,sans-serif">
+    First Bounty runs entirely in your browser (labs, progress, tracker) and needs JavaScript enabled.
+  </p>
+</noscript>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
